@@ -8,9 +8,23 @@ module FSM (
     output reg door_open,
     output reg door_open_exit,
     output reg full_garage,
-    output reg [3:0] parking_light
+    output reg [3:0] parking_light,
+    output reg [3:0] state
 );
-    // States
+
+
+
+
+    ////////////////////////////////////////////////////
+    ////////state ro az module hazf nakon, error mikhore////////
+    //////////////////////////////
+
+
+
+
+
+
+
     parameter 
         empty = 4'b0000,
         s1 = 4'b0001, s2 = 4'b0010, s3 = 4'b0011, s4 = 4'b0100,
@@ -21,10 +35,11 @@ module FSM (
 
     
     reg flag_car_out; // it is used because this inout is press button so once it is pressed we should keep its data until we use it
-    assign parking_light = state; // because state is showing which slot is free and which is not
+     // because state is showing which slot is free and which is not
 
     always @(posedge clk or posedge rst or posedge car_out[2]) 
     begin // posedge car_out[2] is for the push button on fpga. if user press it then the choosen car should exit
+        parking_light = state;
         if(rst)
         begin
             state <= empty;
@@ -192,6 +207,7 @@ module FSM (
                 if (car_in) 
                 begin
                     state <= full;
+                    full_garage <= 1'b1;
                     door_open <= 1'b1;
                 end else if (flag_car_out) 
                 begin
@@ -288,6 +304,7 @@ module FSM (
                 if (car_in) 
                 begin
                     state <= full;
+                    full_garage <= 1'b1;
                     door_open <= 1'b1;
                 end else if (flag_car_out) 
                 begin
@@ -341,6 +358,7 @@ module FSM (
                 if (car_in) 
                 begin
                     state <= full;
+                    full_garage <= 1'b1;
                     door_open <= 1'b1;
                 end else if (flag_car_out) 
                 begin
@@ -370,6 +388,7 @@ module FSM (
                 if (car_in) 
                 begin
                     state <= full;
+                    full_garage <= 1'b1;
                     door_open <= 1'b1;
                 end else if (flag_car_out) 
                 begin
@@ -403,21 +422,25 @@ module FSM (
                         state <= s14;
                         door_open_exit <= 1'b1;
                         flag_car_out <= 1'b0;
+                        full_garage <= 1'b0;
                     end else if (car_out[1:0] == 2'b01) 
                     begin
                         state <= s13;
                         door_open_exit <= 1'b1;
                         flag_car_out <= 1'b0;
+                        full_garage <= 1'b0;
                     end else if (car_out[1:0] == 2'b10) 
                     begin
                         state <= s11;
                         door_open_exit <= 1'b1;
                         flag_car_out <= 1'b0;
+                        full_garage <= 1'b0;
                     end else if (car_out[1:0] == 2'b11) 
                     begin
                         state <= s7;
                         door_open_exit <= 1'b1;
                         flag_car_out <= 1'b0;
+                        full_garage <= 1'b0;
                     end
                 end
             end
@@ -425,3 +448,93 @@ module FSM (
     end
 endmodule
 
+
+
+
+`timescale 1ns / 1ps
+
+module FSM_tb;
+
+    // Inputs
+    reg car_in;
+    reg [2:0] car_out;
+    reg clk;
+    reg rst;
+
+    // Outputs
+    wire [2:0] space_count;
+    wire [1:0] near_slot;
+    wire door_open;
+    wire door_open_exit;
+    wire full_garage;
+    wire [3:0] parking_light;
+    wire [3:0] state;
+
+    // Instantiate the FSM module
+    FSM uut (
+        .car_in(car_in),
+        .car_out(car_out),
+        .clk(clk),
+        .rst(rst),
+        .space_count(space_count),
+        .near_slot(near_slot),
+        .door_open(door_open),
+        .door_open_exit(door_open_exit),
+        .full_garage(full_garage),
+        .parking_light(parking_light),
+        .state(state)
+    );
+
+    // Clock generation
+    always #5 clk = ~clk;
+
+    initial begin
+        $dumpfile("FSM_tb.vcd");
+        $dumpvars(0,FSM_tb);
+
+        // Initialize Inputs
+        car_in = 0;
+        car_out = 3'b000;
+        clk = 0;
+        rst = 1;
+
+        // Reset the system
+        #10 rst = 0;
+
+        // Test case 1: Add a car
+        #10 car_in = 1;
+        #10 car_in = 0;
+
+        // Test case 2: Add another car
+        #20 car_in = 1;
+        #10 car_in = 0;
+
+        // Test case 3: Remove a car from slot 0
+        #30 car_out = 3'b100; // Activate exit for slot 0
+        #10 car_out = 3'b000;
+
+        // Test case 4: Add another car
+        #20 car_in = 1;
+        #10 car_in = 0;
+
+        // Test case 5: Remove a car from slot 1
+        #30 car_out = 3'b101; // Activate exit for slot 1
+        #10 car_out = 3'b000;
+
+        // Test case 6: Fill the garage
+        #20 car_in = 1;
+        #10 car_in = 0;
+        #20 car_in = 1;
+        #10 car_in = 0;
+        #20 car_in = 1;
+        #10 car_in = 0;
+
+        // Test case 7: Remove a car from slot 3
+        #30 car_out = 3'b111; // Activate exit for slot 3
+        #10 car_out = 3'b000;
+
+        // Finish simulation
+        #50 $stop;
+    end
+
+endmodule
