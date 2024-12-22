@@ -22,8 +22,9 @@ module FSM (
 
     
     reg flag_car_out; // it is used because this inout is press button so once it is pressed we should keep its data until we use it
+    
 
-    always @(posedge clk or posedge rst or posedge car_out[2]) 
+    always @(posedge clk or posedge rst) 
     begin // posedge car_out[2] is for the push button on fpga. if user press it then the choosen car should exit
         parking_light = state;
         if(rst)
@@ -435,9 +436,7 @@ module FSM (
 endmodule
 
 
-
-
-`timescale 1ns / 1ps
+`timescale 1ns/1ps
 
 module FSM_tb;
 
@@ -472,50 +471,79 @@ module FSM_tb;
     );
 
     // Clock generation
-    always #12.5 clk = ~clk;
+    initial begin
+        clk = 0;
+        forever #12.5 clk = ~clk;
+    end
+    
+    integer input_file, output_file, scan_file;
+    reg [3:0] input_data;
 
     initial begin
         $dumpfile("FSM_tb.vcd");
-        $dumpvars(0, parking_light, state, car_in, car_out, rst, space_count, near_slot, door_open, door_open_exit, full_garage);
-
-        // Initialize Inputs
-        car_in = 0;
-        car_out = 3'b000;
-        clk = 0;
-        rst = 1;
-
-        // Reset the system
+        $dumpvars(0, FSM_tb);
+        rst = 1; #25
         rst = 0; #25
+        input_file = $fopen("input.txt", "r");
+        output_file = $fopen("output.txt", "w");
 
-        // Test case 1: Add a car
-        car_in = 1; #25
-        car_in = 0; #30
+        if (input_file == 0 || output_file == 0) begin
+            $display("Failed to open file.");
+            $finish;
+        end
 
-        // Test case 2: Add another car
-        car_in = 1; #25
-        car_in = 0; #30
+        while (!$feof(input_file)) begin
+            scan_file = $fscanf(input_file, "%4b\n", input_data);
+            car_in = input_data[3];
+            car_out = input_data[2:0];
+            $display("Read input: car_in=%b, car_out=%b", car_in, car_out);
+            #50;
+            $fwrite(output_file, "%4b [%d,%d]\n", parking_light, space_count, near_slot);
+        end
 
-        // Test case 3: Remove a car from slot 0
-        car_out = 3'b100; #25 
-        car_out = 3'b000; #30
-
-        // Test case 4: Add another car
-        car_in = 1; #25
-        car_in = 0; #30
-
-        // Test case 5: Remove a car from slot 1
-        car_out = 3'b101; #25
-        car_out = 3'b000; #30
-
-        // Test case 6: Fill the garage
-        car_in = 1; #200
-        car_in = 0; #30
-
-        // Test case 7: Remove a car from slot 3
-        car_out = 3'b111; #25
-        car_out = 3'b000; #30
-        // Finish simulation
-        #50 $stop;
+        $fclose(input_file);
+        $fclose(output_file);
+        $finish;
     end
 
 endmodule
+
+
+        // // Initialize Inputs
+        // car_in = 0;
+        // car_out = 3'b000;
+        // clk = 0;
+        // rst = 1;
+
+        // // Reset the system
+        // rst = 0; #25
+
+        // // Test case 1: Add a car
+        // car_in = 1; #25
+        // car_in = 0; #30
+
+        // // Test case 2: Add another car
+        // car_in = 1; #25
+        // car_in = 0; #30
+
+        // // Test case 3: Remove a car from slot 0
+        // car_out = 3'b100; #25 
+        // car_out = 3'b000; #30
+
+        // // Test case 4: Add another car
+        // car_in = 1; #25
+        // car_in = 0; #30
+
+        // // Test case 5: Remove a car from slot 1
+        // car_out = 3'b101; #25
+        // car_out = 3'b000; #30
+
+        // // Test case 6: Fill the garage
+        // car_in = 1; #200
+        // car_in = 0; #30
+
+        // // Test case 7: Remove a car from slot 3
+        // car_out = 3'b111; #25
+        // car_out = 3'b000; #30
+        // // Finish simulation
+        // #50
