@@ -10,8 +10,7 @@ module main(
     output full_garage,
     output [3:0] parking_light
 );
-    
-    
+
     wire car_in ;
     wire [2:0] car_out;
     reg fsm_car_in ; 
@@ -23,6 +22,5 @@ module main(
     debouncer d4 (car_out_bounced[2] , clk , rst , car_out[2]);
 
     FSM fsm (car_in , car_out , clk , rst , space_count , near_slot , door_open , door_open_exit , full_garage , parking_light);
-
 endmodule
 

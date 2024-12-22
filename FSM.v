@@ -12,19 +12,6 @@ module FSM (
     output reg [3:0] state
 );
 
-
-
-
-    ////////////////////////////////////////////////////
-    ////////state ro az module hazf nakon, error mikhore////////
-    //////////////////////////////
-
-
-
-
-
-
-
     parameter 
         empty = 4'b0000,
         s1 = 4'b0001, s2 = 4'b0010, s3 = 4'b0011, s4 = 4'b0100,
@@ -35,7 +22,6 @@ module FSM (
 
     
     reg flag_car_out; // it is used because this inout is press button so once it is pressed we should keep its data until we use it
-     // because state is showing which slot is free and which is not
 
     always @(posedge clk or posedge rst or posedge car_out[2]) 
     begin // posedge car_out[2] is for the push button on fpga. if user press it then the choosen car should exit
@@ -486,11 +472,11 @@ module FSM_tb;
     );
 
     // Clock generation
-    always #5 clk = ~clk;
+    always #12.5 clk = ~clk;
 
     initial begin
         $dumpfile("FSM_tb.vcd");
-        $dumpvars(0,FSM_tb);
+        $dumpvars(0, parking_light, state, car_in, car_out, rst, space_count, near_slot, door_open, door_open_exit, full_garage);
 
         // Initialize Inputs
         car_in = 0;
@@ -499,40 +485,35 @@ module FSM_tb;
         rst = 1;
 
         // Reset the system
-        #10 rst = 0;
+        rst = 0; #25
 
         // Test case 1: Add a car
-        #10 car_in = 1;
-        #10 car_in = 0;
+        car_in = 1; #25
+        car_in = 0; #30
 
         // Test case 2: Add another car
-        #20 car_in = 1;
-        #10 car_in = 0;
+        car_in = 1; #25
+        car_in = 0; #30
 
         // Test case 3: Remove a car from slot 0
-        #30 car_out = 3'b100; // Activate exit for slot 0
-        #10 car_out = 3'b000;
+        car_out = 3'b100; #25 
+        car_out = 3'b000; #30
 
         // Test case 4: Add another car
-        #20 car_in = 1;
-        #10 car_in = 0;
+        car_in = 1; #25
+        car_in = 0; #30
 
         // Test case 5: Remove a car from slot 1
-        #30 car_out = 3'b101; // Activate exit for slot 1
-        #10 car_out = 3'b000;
+        car_out = 3'b101; #25
+        car_out = 3'b000; #30
 
         // Test case 6: Fill the garage
-        #20 car_in = 1;
-        #10 car_in = 0;
-        #20 car_in = 1;
-        #10 car_in = 0;
-        #20 car_in = 1;
-        #10 car_in = 0;
+        car_in = 1; #200
+        car_in = 0; #30
 
         // Test case 7: Remove a car from slot 3
-        #30 car_out = 3'b111; // Activate exit for slot 3
-        #10 car_out = 3'b000;
-
+        car_out = 3'b111; #25
+        car_out = 3'b000; #30
         // Finish simulation
         #50 $stop;
     end
