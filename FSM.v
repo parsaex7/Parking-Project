@@ -22,7 +22,7 @@ module FSM (
     
 
     always @(posedge clk or posedge rst) 
-    begin // posedge car_out[2] is for the push button on fpga. if user press it then the choosen car should exit
+    begin
         if(rst)
         begin
             state <= empty;
@@ -50,7 +50,7 @@ module FSM (
             end
             s1: 
             begin
-                door_open <= 1'b1;
+                door_open <= 1'b0;
                 if (car_in) 
                 begin
                     space_count <= 3'b010;
@@ -91,7 +91,7 @@ module FSM (
             end
             s3: 
             begin
-                door_open <= 1'b1;
+                door_open <= 1'b0;
                 if (car_in) 
                 begin
                     state <= s7;
@@ -427,6 +427,13 @@ module FSM (
             begin
                 door_open <= 1'b0;
                 door_open_exit = 1'b0;
+                if (car_in)
+                begin
+                    full_garage <= 1'b1;
+                end else 
+                begin
+                    full_garage <= 1'b0;
+                end
                 if (car_out[2]) 
                 begin
                     if (car_out[1:0] == 2'b00) 
@@ -515,6 +522,7 @@ module FSM_tb;
         rst = 1;
         #25;
         rst = 0;
+        #12.5
 
 
         input_file = $fopen("input.txt", "r");
@@ -531,11 +539,16 @@ module FSM_tb;
             car_out = input_data[2:0];
             $display("Read input: car_in=%b, car_out=%b", car_in, car_out); 
             #25;
-            $fwrite(output_file, "%4b [%d,%d]\t", state, space_count, near_slot);
+            if (space_count == 0) 
+            begin
+                $fwrite(output_file, "%4b [%d,-]\t", state, space_count);
+            end else
+            begin
+                $fwrite(output_file, "%4b [%d,%d]\t", state, space_count, near_slot);
+            end
             if (door_open | door_open_exit) begin
                 $fwrite(output_file, "Door");
-            end
-            if (full_garage) begin
+            end else if (full_garage) begin
                 $fwrite(output_file, "Full");
             end
             $fwrite(output_file, "\n");
