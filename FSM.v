@@ -8,7 +8,6 @@ module FSM (
     output reg door_open,
     output reg door_open_exit,
     output reg full_garage,
-    output reg [3:0] parking_light,
     output reg [3:0] state
 );
 
@@ -21,12 +20,9 @@ module FSM (
         full = 4'b1111;
 
     
-    reg flag_car_out; // it is used because this inout is press button so once it is pressed we should keep its data until we use it
-    
 
     always @(posedge clk or posedge rst) 
     begin // posedge car_out[2] is for the push button on fpga. if user press it then the choosen car should exit
-        parking_light = state;
         if(rst)
         begin
             state <= empty;
@@ -35,12 +31,6 @@ module FSM (
             door_open <= 1'b0;
             door_open_exit <= 1'b0;
             near_slot <= 2'b00;
-            parking_light <= 4'b0000;
-        end
-
-        if(car_out[2])
-        begin
-            flag_car_out <= 1'b1;
         end
         
         
@@ -48,385 +38,424 @@ module FSM (
         case (state)
             empty: 
             begin
-                space_count <= 3'b100;
-                near_slot <= 2'b00;
                 door_open <= 1'b0;
+                door_open_exit = 1'b0;
                 if (car_in) 
                 begin
-                    state <= s1;
+                    space_count <= 3'b011;
+                    near_slot <= 2'b01;
                     door_open <= 1'b1;
+                    state <= s1;
                 end
             end
             s1: 
             begin
-                space_count <= 3'b011;
-                near_slot <= 2'b01;
-                door_open <= 1'b0;
+                door_open <= 1'b1;
                 if (car_in) 
                 begin
-                    state <= s3;
+                    space_count <= 3'b010;
+                    near_slot <= 2'b10;
                     door_open <= 1'b1;
-                end else if (flag_car_out) 
+                    state <= s3;
+                end else if (car_out[2]) 
                 begin
                     if (car_out[1:0] == 2'b00) 
                     begin
                         state <= empty;
+                        space_count <= 3'b100;
+                        near_slot <= 2'b00;
                         door_open_exit <= 1'b1;
-                        flag_car_out <= 1'b0;
                     end
                 end
             end
             s2: 
             begin
-                space_count <= 3'b011;
-                near_slot <= 2'b00;
                 door_open <= 1'b0;
+                door_open_exit = 1'b0;
                 if (car_in) 
                 begin
                     state <= s3;
+                    space_count <= 3'b010;
+                    near_slot <= 2'b10;
                     door_open <= 1'b1;
-                end else if (flag_car_out) 
+                end else if (car_out[2]) 
                 begin
                     if (car_out[1:0] == 2'b01) 
                     begin
                         state <= empty;
+                        space_count <= 3'b100;
+                        near_slot <= 2'b00;
                         door_open_exit <= 1'b1;
-                        flag_car_out <= 1'b0;
                     end
                 end
             end
             s3: 
             begin
-                space_count <= 3'b010;
-                near_slot <= 2'b10;
-                door_open <= 1'b0;
+                door_open <= 1'b1;
                 if (car_in) 
                 begin
                     state <= s7;
+                    space_count <= 3'b001;
+                    near_slot <= 2'b11;
                     door_open <= 1'b1;
-                end else if (flag_car_out) 
+                end else if (car_out[2]) 
                 begin
                     if (car_out[1:0] == 2'b00) 
                     begin
                         state <= s2;
-                        door_open <= 1'b1;
-                        flag_car_out <= 1'b0;
+                        space_count <= 3'b011;
+                        near_slot <= 2'b00;
+                        door_open_exit <= 1'b1;
                     end else if (car_out[1:0] == 2'b01) 
                     begin
                         state <= s1;
+                        space_count <= 3'b011;
+                        near_slot <= 2'b01;
                         door_open_exit <= 1'b1;
-                        flag_car_out <= 1'b0;
                     end
                 end
             end
             s4: 
             begin
-                space_count <= 3'b011;
-                near_slot <= 2'b00;
                 door_open <= 1'b0;
+                door_open_exit = 1'b0;
                 if (car_in) 
                 begin
                     state <= s6;
+                    space_count <= 3'b010;
+                    near_slot <= 2'b00;
                     door_open <= 1'b1;
-                end else if (flag_car_out) 
+                end else if (car_out[2]) 
                 begin
                     if (car_out[1:0] == 2'b10) 
                     begin
                         state <= empty;
+                        space_count <= 3'b100;
+                        near_slot <= 2'b00;
                         door_open_exit <= 1'b1;
-                        flag_car_out <= 1'b0;
                     end
                 end
             end
             s5: 
             begin
-                space_count <= 3'b010;
-                near_slot <= 2'b01;
                 door_open <= 1'b0;
+                door_open_exit = 1'b0;
                 if (car_in) 
                 begin
                     state <= s7;
+                    space_count <= 3'b001;
+                    near_slot <= 2'b11;
                     door_open <= 1'b1;
-                end else if (flag_car_out) 
+                end else if (car_out[2]) 
                 begin
                     if (car_out[1:0] == 2'b00) 
                     begin
                         state <= s4;
+                        space_count <= 3'b011;
+                        near_slot <= 2'b00;
                         door_open_exit <= 1'b1;
-                        flag_car_out <= 1'b0;
                     end else if (car_out[1:0] == 2'b10) 
                     begin
                         state <= s1;
+                        space_count <= 3'b011;
+                        near_slot <= 2'b01;
                         door_open_exit <= 1'b1;
-                        flag_car_out <= 1'b0;
                     end
                 end
             end
             s6: 
             begin
-                space_count <= 3'b010;
-                near_slot <= 2'b00;
                 door_open <= 1'b0;
+                door_open_exit = 1'b0;
                 if (car_in) 
                 begin
                     state <= s7;
+                    space_count <= 3'b001;
+                    near_slot <= 2'b11;
                     door_open <= 1'b1;
-                end else if (flag_car_out) 
+                end else if (car_out[2]) 
                 begin
                     if (car_out[1:0] == 2'b01) 
                     begin
                         state <= s4;
+                        space_count <= 3'b011;
+                        near_slot <= 2'b00;
                         door_open_exit <= 1'b1;
-                        flag_car_out <= 1'b0;
                     end else if (car_out[1:0] == 2'b10) 
                     begin
                         state <= s2;
+                        space_count <= 3'b011;
+                        near_slot <= 2'b00;
                         door_open_exit <= 1'b1;
-                        flag_car_out <= 1'b0;
                     end
                 end
             end
             s7: 
             begin
-                space_count <= 3'b001;
-                near_slot <= 2'b11;
                 door_open <= 1'b0;
+                door_open_exit = 1'b0;
                 if (car_in) 
                 begin
                     state <= full;
+                    space_count <= 3'b000;
                     full_garage <= 1'b1;
-                    door_open <= 1'b1;
-                end else if (flag_car_out) 
+                    door_open <= 1'b1;  //be carefull
+                end else if (car_out[2]) 
                 begin
                     if (car_out[1:0] == 2'b10) 
                     begin
                         state <= s3;
+                        space_count <= 3'b010;
+                        near_slot <= 2'b10;
                         door_open_exit <= 1'b1;
-                        flag_car_out <= 1'b0;
                     end else if (car_out[1:0] == 2'b01) 
                     begin
                         state <= s5;
+                        space_count <= 3'b010;
+                        near_slot <= 2'b01;
                         door_open_exit <= 1'b1;
-                        flag_car_out <= 1'b0;
                     end else if (car_out[1:0] == 2'b00) 
                     begin
                         state <= s6;
+                        space_count <= 3'b010;
+                        near_slot <= 2'b00;
                         door_open_exit <= 1'b1;
-                        flag_car_out <= 1'b0;
                     end
                 end
             end
             s8: 
             begin
-                space_count <= 3'b011;
-                near_slot <= 2'b00;
                 door_open <= 1'b0;
+                door_open_exit = 1'b0;
                 if (car_in) 
                 begin
                     state <= s9;
+                    space_count <= 3'b010;
+                    near_slot <= 2'b01;
                     door_open <= 1'b1;
-                end else if (flag_car_out) 
+                end else if (car_out[2]) 
                 begin
                     if (car_out[1:0] == 2'b11) 
                     begin
                         state <= empty;
+                        space_count <= 3'b100;
+                        near_slot <= 2'b00;
                         door_open_exit <= 1'b1;
-                        flag_car_out <= 1'b0;
                     end
                 end
             end
             s9: 
             begin
-                space_count <= 3'b010;
-                near_slot <= 2'b01;
                 door_open <= 1'b0;
+                door_open_exit = 1'b0;
                 if (car_in) 
                 begin
                     state <= s11;
+                    space_count <= 3'b001;
+                    near_slot <= 2'b10;
                     door_open <= 1'b1;
-                end else if (flag_car_out) 
+                end else if (car_out[2]) 
                 begin
                     if (car_out[1:0] == 2'b00) 
                     begin
                         state <= s8;
+                        space_count <= 3'b011;
+                        near_slot <= 2'b00;
                         door_open_exit <= 1'b1;
-                        flag_car_out <= 1'b0;
                     end else if (car_out[1:0] == 2'b11) 
                     begin
                         state <= s1;
+                        space_count <= 3'b011;
+                        near_slot <= 2'b01;
                         door_open_exit <= 1'b1;
-                        flag_car_out <= 1'b0;
                     end
                 end
             end
             s10: 
             begin
-                space_count <= 3'b010;
-                near_slot <= 2'b00;
                 door_open <= 1'b0;
+                door_open_exit = 1'b0;
                 if (car_in) 
                 begin
                     state <= s11;
+                    space_count <= 3'b001;
+                    near_slot <= 2'b10;
                     door_open <= 1'b1;
-                end else if (flag_car_out) 
+                end else if (car_out[2]) 
                 begin
                     if (car_out[1:0] == 2'b01) 
                     begin
                         state <= s8;
+                        space_count <= 3'b011;
+                        near_slot <= 2'b00;
                         door_open_exit <= 1'b1;
-                        flag_car_out <= 1'b0;
                     end else if (car_out[1:0] == 2'b11) 
                     begin
                         state <= s2;
+                        space_count <= 3'b011;
+                        near_slot <= 2'b00;
                         door_open_exit <= 1'b1;
-                        flag_car_out <= 1'b0;
                     end
                 end
             end
             s11: 
             begin
-                space_count <= 3'b001;
-                near_slot <= 2'b10;
                 door_open <= 1'b0;
+                door_open_exit = 1'b0;
                 if (car_in) 
                 begin
                     state <= full;
                     full_garage <= 1'b1;
                     door_open <= 1'b1;
-                end else if (flag_car_out) 
+                end else if (car_out[2]) 
                 begin
                     if (car_out[1:0] == 2'b00) 
                     begin
                         state <= s10;
+                        space_count <= 3'b010;
+                        near_slot <= 2'b00;
                         door_open_exit <= 1'b1;
-                        flag_car_out <= 1'b0;
                     end else if (car_out[1:0] == 2'b01) 
                     begin
                         state <= s9;
+                        space_count <= 3'b010;
+                        near_slot <= 2'b01;
                         door_open_exit <= 1'b1;
-                        flag_car_out <= 1'b0;
                     end else if (car_out[1:0] == 2'b11) 
-                    begin
+                    begin  // be carefull
                         state <= s3;
+                        space_count <= 3'b010;
+                        near_slot <= 2'b10;
                         door_open_exit <= 1'b1;
-                        flag_car_out <= 1'b0;
                     end
                 end
             end
             s12: 
             begin
-                space_count <= 3'b010;
-                near_slot <= 2'b00;
                 door_open <= 1'b0;
+                door_open_exit = 1'b0;
                 if (car_in) 
                 begin
                     state <= s13;
+                    space_count <= 3'b001;
+                    near_slot <= 2'b01;
                     door_open <= 1'b1;
-                end else if (flag_car_out) 
+                end else if (car_out[2]) 
                 begin
                     if (car_out[1:0] == 2'b10) 
                     begin
                         state <= s8;
+                        space_count <= 3'b011;
+                        near_slot <= 2'b00;
                         door_open_exit <= 1'b1;
-                        flag_car_out <= 1'b0;
                     end else if (car_out[1:0] == 2'b11) 
                     begin
                         state <= s4;
+                        space_count <= 3'b011;
+                        near_slot <= 2'b00;
                         door_open_exit <= 1'b1;
-                        flag_car_out <= 1'b0;
                     end
                 end
             end
             s13: 
             begin
-                space_count <= 3'b001;
-                near_slot <= 2'b01;
                 door_open <= 1'b0;
+                door_open_exit = 1'b0;
                 if (car_in) 
                 begin
                     state <= full;
-                    full_garage <= 1'b1;
+                    space_count <= 3'b000;
+                    full_garage <= 1'b1;   // be carefull
                     door_open <= 1'b1;
-                end else if (flag_car_out) 
+                end else if (car_out[2]) 
                 begin
                     if (car_out[1:0] == 2'b00) 
                     begin
                         state <= s12;
+                        space_count <= 3'b010;
+                        near_slot <= 2'b00;
                         door_open_exit <= 1'b1;
-                        flag_car_out <= 1'b0;
                     end else if (car_out[1:0] == 2'b10) 
                     begin
                         state <= s9;
+                        space_count <= 3'b010;
+                        near_slot <= 2'b01;
                         door_open_exit <= 1'b1;
-                        flag_car_out <= 1'b0;
                     end else if (car_out[1:0] == 2'b11) 
                     begin
                         state <= s5;
+                        space_count <= 3'b010; //be carefull
+                        near_slot <= 2'b01;
                         door_open_exit <= 1'b1;
-                        flag_car_out <= 1'b0;
                     end
                 end
             end
             s14: 
             begin
-                space_count <= 3'b001;
-                near_slot <= 2'b00;
                 door_open <= 1'b0;
+                door_open_exit = 1'b0;
                 if (car_in) 
                 begin
                     state <= full;
+                    space_count <= 3'b000;
                     full_garage <= 1'b1;
                     door_open <= 1'b1;
-                end else if (flag_car_out) 
+                end else if (car_out[2]) 
                 begin
                     if (car_out[1:0] == 2'b10) 
                     begin
                         state <= s10;
+                        space_count <= 3'b010;
+                        near_slot <= 2'b00;
                         door_open_exit <= 1'b1;
-                        flag_car_out <= 1'b0;
                     end else if (car_out[1:0] == 2'b01) 
                     begin
                         state <= s12;
+                        space_count <= 3'b010;
+                        near_slot <= 2'b01;
                         door_open_exit <= 1'b1;
-                        flag_car_out <= 1'b0;
                     end else if (car_out[1:0] == 2'b11) 
                     begin
                         state <= s6;
+                        space_count <= 3'b010;
+                        near_slot <= 2'b00;
                         door_open_exit <= 1'b1;
-                        flag_car_out <= 1'b0;
                     end
                 end
             end
             full: 
             begin
-                space_count <= 3'b000;
-                full_garage <= 1'b1; 
                 door_open <= 1'b0;
-                if (flag_car_out) 
+                door_open_exit = 1'b0;
+                if (car_out[2]) 
                 begin
                     if (car_out[1:0] == 2'b00) 
                     begin
                         state <= s14;
+                        space_count <= 3'b001;
+                        near_slot <= 2'b00;
                         door_open_exit <= 1'b1;
-                        flag_car_out <= 1'b0;
                         full_garage <= 1'b0;
                     end else if (car_out[1:0] == 2'b01) 
                     begin
                         state <= s13;
+                        space_count <= 3'b001;
+                        near_slot <= 2'b01;
                         door_open_exit <= 1'b1;
-                        flag_car_out <= 1'b0;
                         full_garage <= 1'b0;
                     end else if (car_out[1:0] == 2'b10) 
                     begin
                         state <= s11;
+                        space_count <= 3'b001;
+                        near_slot <= 2'b10;
                         door_open_exit <= 1'b1;
-                        flag_car_out <= 1'b0;
                         full_garage <= 1'b0;
                     end else if (car_out[1:0] == 2'b11) 
                     begin
                         state <= s7;
+                        space_count <= 3'b001;
+                        near_slot <= 2'b11;
                         door_open_exit <= 1'b1;
-                        flag_car_out <= 1'b0;
                         full_garage <= 1'b0;
                     end
                 end
@@ -452,7 +481,6 @@ module FSM_tb;
     wire door_open;
     wire door_open_exit;
     wire full_garage;
-    wire [3:0] parking_light;
     wire [3:0] state;
 
     // Instantiate the FSM module
@@ -466,7 +494,6 @@ module FSM_tb;
         .door_open(door_open),
         .door_open_exit(door_open_exit),
         .full_garage(full_garage),
-        .parking_light(parking_light),
         .state(state)
     );
 
@@ -482,8 +509,14 @@ module FSM_tb;
     initial begin
         $dumpfile("FSM_tb.vcd");
         $dumpvars(0, FSM_tb);
-        rst = 1; #25
-        rst = 0; #25
+
+        car_in = 0;
+        car_out = 3'b000;
+        rst = 1;
+        #25;
+        rst = 0;
+
+
         input_file = $fopen("input.txt", "r");
         output_file = $fopen("output.txt", "w");
 
@@ -496,27 +529,36 @@ module FSM_tb;
             scan_file = $fscanf(input_file, "%4b\n", input_data);
             car_in = input_data[3];
             car_out = input_data[2:0];
-            $display("Read input: car_in=%b, car_out=%b", car_in, car_out);
-            #50;
-            $fwrite(output_file, "%4b [%d,%d]\n", parking_light, space_count, near_slot);
+            $display("Read input: car_in=%b, car_out=%b", car_in, car_out); 
+            #25;
+            $fwrite(output_file, "%4b [%d,%d]\t", state, space_count, near_slot);
+            if (door_open | door_open_exit) begin
+                $fwrite(output_file, "Door");
+            end
+            if (full_garage) begin
+                $fwrite(output_file, "Full");
+            end
+            $fwrite(output_file, "\n");
         end
 
         $fclose(input_file);
         $fclose(output_file);
         $finish;
+
+
+
     end
 
 endmodule
 
 
-        // // Initialize Inputs
-        // car_in = 0;
-        // car_out = 3'b000;
-        // clk = 0;
-        // rst = 1;
 
-        // // Reset the system
-        // rst = 0; #25
+        //         // Initialize Inputs
+        // rst = 1'b1; #25
+        // rst = 1'b0;
+
+        // car_in = 0;
+        // car_out = 3'b000; #30
 
         // // Test case 1: Add a car
         // car_in = 1; #25
@@ -547,3 +589,4 @@ endmodule
         // car_out = 3'b000; #30
         // // Finish simulation
         // #50
+        // $finish;

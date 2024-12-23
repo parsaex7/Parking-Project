@@ -1,5 +1,5 @@
 $date
-	Sun Dec 22 22:37:20 2024
+	Mon Dec 23 20:23:21 2024
 $end
 $version
 	Icarus Verilog
@@ -10,435 +10,313 @@ $end
 $scope module FSM_tb $end
 $var wire 4 ! state [3:0] $end
 $var wire 3 " space_count [2:0] $end
-$var wire 4 # parking_light [3:0] $end
-$var wire 2 $ near_slot [1:0] $end
-$var wire 1 % full_garage $end
-$var wire 1 & door_open_exit $end
-$var wire 1 ' door_open $end
-$var reg 1 ( car_in $end
-$var reg 3 ) car_out [2:0] $end
-$var reg 1 * clk $end
-$var reg 4 + input_data [3:0] $end
-$var reg 1 , rst $end
-$var integer 32 - input_file [31:0] $end
-$var integer 32 . output_file [31:0] $end
-$var integer 32 / scan_file [31:0] $end
+$var wire 2 # near_slot [1:0] $end
+$var wire 1 $ full_garage $end
+$var wire 1 % door_open_exit $end
+$var wire 1 & door_open $end
+$var reg 1 ' car_in $end
+$var reg 3 ( car_out [2:0] $end
+$var reg 1 ) clk $end
+$var reg 4 * input_data [3:0] $end
+$var reg 1 + rst $end
+$var integer 32 , input_file [31:0] $end
+$var integer 32 - output_file [31:0] $end
+$var integer 32 . scan_file [31:0] $end
 $scope module uut $end
-$var wire 1 ( car_in $end
-$var wire 3 0 car_out [2:0] $end
-$var wire 1 * clk $end
-$var wire 1 , rst $end
-$var parameter 4 1 empty $end
-$var parameter 4 2 full $end
-$var parameter 4 3 s1 $end
-$var parameter 4 4 s10 $end
-$var parameter 4 5 s11 $end
-$var parameter 4 6 s12 $end
-$var parameter 4 7 s13 $end
-$var parameter 4 8 s14 $end
-$var parameter 4 9 s2 $end
-$var parameter 4 : s3 $end
-$var parameter 4 ; s4 $end
-$var parameter 4 < s5 $end
-$var parameter 4 = s6 $end
-$var parameter 4 > s7 $end
-$var parameter 4 ? s8 $end
-$var parameter 4 @ s9 $end
-$var reg 1 ' door_open $end
-$var reg 1 & door_open_exit $end
-$var reg 1 A flag_car_in $end
-$var reg 1 B flag_car_out $end
-$var reg 1 % full_garage $end
-$var reg 2 C near_slot [1:0] $end
-$var reg 4 D parking_light [3:0] $end
-$var reg 3 E space_count [2:0] $end
-$var reg 4 F state [3:0] $end
+$var wire 1 ' car_in $end
+$var wire 3 / car_out [2:0] $end
+$var wire 1 ) clk $end
+$var wire 1 + rst $end
+$var parameter 4 0 empty $end
+$var parameter 4 1 full $end
+$var parameter 4 2 s1 $end
+$var parameter 4 3 s10 $end
+$var parameter 4 4 s11 $end
+$var parameter 4 5 s12 $end
+$var parameter 4 6 s13 $end
+$var parameter 4 7 s14 $end
+$var parameter 4 8 s2 $end
+$var parameter 4 9 s3 $end
+$var parameter 4 : s4 $end
+$var parameter 4 ; s5 $end
+$var parameter 4 < s6 $end
+$var parameter 4 = s7 $end
+$var parameter 4 > s8 $end
+$var parameter 4 ? s9 $end
+$var reg 1 & door_open $end
+$var reg 1 % door_open_exit $end
+$var reg 1 $ full_garage $end
+$var reg 2 @ near_slot [1:0] $end
+$var reg 3 A space_count [2:0] $end
+$var reg 4 B state [3:0] $end
 $upscope $end
 $upscope $end
 $enddefinitions $end
 $comment Show the parameter values. $end
 $dumpall
-b1001 @
-b1000 ?
-b111 >
-b110 =
-b101 <
-b100 ;
-b11 :
-b10 9
-b1110 8
-b1101 7
-b1100 6
-b1011 5
-b1010 4
-b1 3
-b1111 2
-b0 1
+b1001 ?
+b1000 >
+b111 =
+b110 <
+b101 ;
+b100 :
+b11 9
+b10 8
+b1110 7
+b1101 6
+b1100 5
+b1011 4
+b1010 3
+b1 2
+b1111 1
+b0 0
 $end
 #0
 $dumpvars
-b0 F
-b100 E
-b0 D
-b0 C
-xB
-xA
-bx 0
-bx /
+b0 B
+b100 A
+b0 @
+b0 /
 bx .
 bx -
-1,
-bx +
-0*
-bx )
-x(
+bx ,
+1+
+bx *
+0)
+b0 (
 0'
 0&
 0%
-b0 $
+0$
 b0 #
 b100 "
 b0 !
 $end
 #12500
-xA
-1*
+1)
 #25000
-0*
-0,
+0)
+b1 .
+b0 *
+b10000000000000000000000000000100 -
+b10000000000000000000000000000011 ,
+0+
 #37500
-1*
+1)
 #50000
-0*
-b0 )
-b0 0
-0(
-b1 /
-b0 +
-b10000000000000000000000000000100 .
-b10000000000000000000000000000011 -
+0)
+1'
+b1000 *
 #62500
-0A
-1*
-#75000
-0*
-#87500
-1*
-#100000
-0*
-1(
-b1000 +
-#112500
-1A
-1'
 b1 !
-b1 F
-1*
-#125000
-0*
-#137500
-0'
-b1 $
-b1 C
-b11 "
-b11 E
-b1 #
-b1 D
-1*
-#150000
-0*
-b1 )
-b1 0
-b1001 +
-#162500
-1*
-#175000
-0*
-#187500
-1*
-#200000
-0*
-0(
-b1 +
-#212500
-0A
-1*
-#225000
-0*
-#237500
-1*
-#250000
-0*
-b11 )
-b11 0
-1(
-b1011 +
-#262500
-1A
-1'
-b11 !
-b11 F
-1*
-#275000
-0*
-#287500
-b111 !
-b111 F
-1A
-1'
-b10 $
-b10 C
-b10 "
-b10 E
-b11 #
-b11 D
-1*
-#300000
-0*
-b101 )
-b101 0
-0(
-b101 +
-#312500
-0A
-0'
-b11 $
-b11 C
-b1 "
-b1 E
-1B
-b111 #
-b111 D
-1*
-#325000
-0*
-#337500
-0B
+b1 B
 1&
-b101 !
-b101 F
-1*
-#350000
-0*
-b0 )
-b0 0
-1(
-b1000 +
-#362500
-1A
-1'
-b111 !
-b111 F
-b1 $
-b1 C
-b10 "
-b10 E
-b101 #
-b101 D
-1*
-#375000
-0*
-#387500
-0'
-b11 $
-b11 C
-b1 "
-b1 E
-b111 #
-b111 D
-1*
-#400000
-0*
-b100 )
-b100 0
-0(
-b100 +
-#412500
-0A
-1B
-1*
-#425000
-0*
-#437500
-0B
-b110 !
-b110 F
-1*
-#450000
-0*
-#462500
-b0 $
-b0 C
-b10 "
-b10 E
-1B
-b110 #
-b110 D
-1*
-#475000
-0*
-#487500
-1*
-#500000
-0*
-b1 )
-b1 0
-1(
-b1001 +
-#512500
-1A
-1'
-b111 !
-b111 F
-1*
-#525000
-0*
-#537500
-0B
-b101 !
-b101 F
-0'
-b11 $
-b11 C
-b1 "
-b1 E
-b111 #
-b111 D
-1*
-#550000
-0*
-b0 )
-b0 0
-b1000 +
-#562500
-b1 $
-b1 C
-b10 "
-b10 E
-b101 #
-b101 D
-1*
-#575000
-0*
-#587500
-1*
-#600000
-0*
-b11 )
-b11 0
-b1011 +
-#612500
-1*
-#625000
-0*
-#637500
-1*
-#650000
-0*
-b0 )
-b0 0
-b1000 +
-#662500
-1*
-#675000
-0*
-#687500
-1*
-#700000
-0*
-0(
-b0 +
-#712500
-0A
-1*
-#725000
-0*
-#737500
-1*
-#750000
-0*
-b100 )
-b100 0
-b100 +
-#762500
-1B
-1*
-#775000
-0*
-#787500
-0B
-b100 !
-b100 F
-1*
-#800000
-0*
-b11 )
-b11 0
-b11 +
-#812500
-b0 $
-b0 C
+b1 #
+b1 @
 b11 "
-b11 E
-b100 #
-b100 D
-1*
-#825000
-0*
-#837500
-1*
-#850000
-0*
-b110 )
-b110 0
-b110 +
-#862500
-1B
-1*
-#875000
-0*
-#887500
-0B
-b0 !
-b0 F
-1*
-#900000
-0*
-b111 )
-b111 0
-b111 +
-#912500
-b100 "
-b100 E
-1B
+b11 A
+1)
+#75000
+0)
+b1 (
+b1 /
+b1001 *
+#87500
+b11 !
+b11 B
+b10 #
+b10 @
+b10 "
+b10 A
+1)
+#100000
+0)
+0'
+b1 *
+#112500
+1)
+#125000
+0)
+b11 (
+b11 /
+1'
+b1011 *
+#137500
+b11 #
+b11 @
+b1 "
+b1 A
+b111 !
+b111 B
+1)
+#150000
+0)
+b101 (
+b101 /
+0'
+b101 *
+#162500
+1%
+b1 #
+b1 @
+b10 "
+b10 A
+b101 !
+b101 B
+0&
+1)
+#175000
+0)
+b0 (
+b0 /
+1'
+b1000 *
+#187500
+1&
+b11 #
+b11 @
+b1 "
+b1 A
+b111 !
+b111 B
+0%
+1)
+#200000
+0)
+b100 (
+b100 /
+0'
+b100 *
+#212500
+1%
 b0 #
-b0 D
-1*
-#925000
-0*
-#937500
-1*
-#950000
-0*
-b101 )
-b101 0
-b101 +
-#962500
-1*
-#975000
-0*
-#987500
-1*
-#1000000
-0*
-b0 )
-b0 0
-b0 +
-#1012500
-1*
-#1025000
-0*
-#1037500
-1*
-#1050000
-0*
+b0 @
+b10 "
+b10 A
+b110 !
+b110 B
+0&
+1)
+#225000
+0)
+#237500
+0%
+1)
+#250000
+0)
+b1 (
+b1 /
+1'
+b1001 *
+#262500
+1&
+b11 #
+b11 @
+b1 "
+b1 A
+b111 !
+b111 B
+1)
+#275000
+0)
+b0 (
+b0 /
+b1000 *
+#287500
+1$
+b0 "
+b0 A
+b1111 !
+b1111 B
+1&
+1)
+#300000
+0)
+b11 (
+b11 /
+b1011 *
+#312500
+0&
+1)
+#325000
+0)
+b0 (
+b0 /
+b1000 *
+#337500
+1)
+#350000
+0)
+0'
+b0 *
+#362500
+1)
+#375000
+0)
+b100 (
+b100 /
+b100 *
+#387500
+0$
+1%
+b0 #
+b0 @
+b1 "
+b1 A
+b1110 !
+b1110 B
+1)
+#400000
+0)
+b11 (
+b11 /
+b11 *
+#412500
+0%
+1)
+#425000
+0)
+b110 (
+b110 /
+b110 *
+#437500
+1%
+b10 "
+b10 A
+b1010 !
+b1010 B
+1)
+#450000
+0)
+b111 (
+b111 /
+b111 *
+#462500
+b11 "
+b11 A
+b10 !
+b10 B
+1%
+1)
+#475000
+0)
+b101 (
+b101 /
+b101 *
+#487500
+b100 "
+b100 A
+b0 !
+b0 B
+1%
+1)
+#500000
+0)
+b0 (
+b0 /
+b0 *
+#512500
+0%
+1)
+#525000
+0)
