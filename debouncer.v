@@ -1,7 +1,20 @@
-module debouncer (input sig , input clk ,input rst, output sig_debounced);
-    wire q0 , q1 , q2;
-    D_FF d0 (sig , clk , rst , q0);
-    D_FF d1 (q0 , clk , rst , q1);
-    D_FF d2 (q1 , clk , rst, q2);
-    assign sig_debounced = q0 & q1 & ~q2;
+module debouncer (
+    input clk,
+    input reset,
+    input sig,
+    output reg sig_debounced
+);
+    reg q0 , q1;
+    always @(posedge clk or posedge reset) 
+    begin
+        if (reset)
+        begin
+            q1 <= 0;
+            q0 <= 0;
+            sig_debounced <= 0;
+        end
+        q1 <= q0;
+        q0 <= sig;
+        sig_debounced <= q0 & ~q1;
+    end
 endmodule

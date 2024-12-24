@@ -1,6 +1,7 @@
 module FSM (
     input car_in, //first bit of 4 bit input
-    input [2:0] car_out, //three last bits of 4 bit input
+    input car_out_deb,
+    input [1:0] car_out, //three last bits of 4 bit input
     input clk,
     input rst,
     output reg [2:0] space_count, // 7 seg
@@ -57,9 +58,9 @@ module FSM (
                     near_slot <= 2'b10;
                     door_open <= 1'b1;
                     state <= s3;
-                end else if (car_out[2]) 
+                end else if (car_out_deb) 
                 begin
-                    if (car_out[1:0] == 2'b00) 
+                    if (car_out == 2'b00) 
                     begin
                         state <= empty;
                         space_count <= 3'b100;
@@ -78,9 +79,9 @@ module FSM (
                     space_count <= 3'b010;
                     near_slot <= 2'b10;
                     door_open <= 1'b1;
-                end else if (car_out[2]) 
+                end else if (car_out_deb) 
                 begin
-                    if (car_out[1:0] == 2'b01) 
+                    if (car_out == 2'b01) 
                     begin
                         state <= empty;
                         space_count <= 3'b100;
@@ -98,15 +99,15 @@ module FSM (
                     space_count <= 3'b001;
                     near_slot <= 2'b11;
                     door_open <= 1'b1;
-                end else if (car_out[2]) 
+                end else if (car_out_deb) 
                 begin
-                    if (car_out[1:0] == 2'b00) 
+                    if (car_out == 2'b00) 
                     begin
                         state <= s2;
                         space_count <= 3'b011;
                         near_slot <= 2'b00;
                         door_open_exit <= 1'b1;
-                    end else if (car_out[1:0] == 2'b01) 
+                    end else if (car_out == 2'b01) 
                     begin
                         state <= s1;
                         space_count <= 3'b011;
@@ -125,9 +126,9 @@ module FSM (
                     space_count <= 3'b010;
                     near_slot <= 2'b00;
                     door_open <= 1'b1;
-                end else if (car_out[2]) 
+                end else if (car_out_deb) 
                 begin
-                    if (car_out[1:0] == 2'b10) 
+                    if (car_out == 2'b10) 
                     begin
                         state <= empty;
                         space_count <= 3'b100;
@@ -146,15 +147,15 @@ module FSM (
                     space_count <= 3'b001;
                     near_slot <= 2'b11;
                     door_open <= 1'b1;
-                end else if (car_out[2]) 
+                end else if (car_out_deb) 
                 begin
-                    if (car_out[1:0] == 2'b00) 
+                    if (car_out == 2'b00) 
                     begin
                         state <= s4;
                         space_count <= 3'b011;
                         near_slot <= 2'b00;
                         door_open_exit <= 1'b1;
-                    end else if (car_out[1:0] == 2'b10) 
+                    end else if (car_out == 2'b10) 
                     begin
                         state <= s1;
                         space_count <= 3'b011;
@@ -173,15 +174,15 @@ module FSM (
                     space_count <= 3'b001;
                     near_slot <= 2'b11;
                     door_open <= 1'b1;
-                end else if (car_out[2]) 
+                end else if (car_out_deb) 
                 begin
-                    if (car_out[1:0] == 2'b01) 
+                    if (car_out == 2'b01) 
                     begin
                         state <= s4;
                         space_count <= 3'b011;
                         near_slot <= 2'b00;
                         door_open_exit <= 1'b1;
-                    end else if (car_out[1:0] == 2'b10) 
+                    end else if (car_out == 2'b10) 
                     begin
                         state <= s2;
                         space_count <= 3'b011;
@@ -200,21 +201,21 @@ module FSM (
                     space_count <= 3'b000;
                     full_garage <= 1'b1;
                     door_open <= 1'b1;  //be carefull
-                end else if (car_out[2]) 
+                end else if (car_out_deb) 
                 begin
-                    if (car_out[1:0] == 2'b10) 
+                    if (car_out == 2'b10) 
                     begin
                         state <= s3;
                         space_count <= 3'b010;
                         near_slot <= 2'b10;
                         door_open_exit <= 1'b1;
-                    end else if (car_out[1:0] == 2'b01) 
+                    end else if (car_out == 2'b01) 
                     begin
                         state <= s5;
                         space_count <= 3'b010;
                         near_slot <= 2'b01;
                         door_open_exit <= 1'b1;
-                    end else if (car_out[1:0] == 2'b00) 
+                    end else if (car_out == 2'b00) 
                     begin
                         state <= s6;
                         space_count <= 3'b010;
@@ -233,9 +234,9 @@ module FSM (
                     space_count <= 3'b010;
                     near_slot <= 2'b01;
                     door_open <= 1'b1;
-                end else if (car_out[2]) 
+                end else if (car_out_deb) 
                 begin
-                    if (car_out[1:0] == 2'b11) 
+                    if (car_out == 2'b11) 
                     begin
                         state <= empty;
                         space_count <= 3'b100;
@@ -254,15 +255,15 @@ module FSM (
                     space_count <= 3'b001;
                     near_slot <= 2'b10;
                     door_open <= 1'b1;
-                end else if (car_out[2]) 
+                end else if (car_out_deb) 
                 begin
-                    if (car_out[1:0] == 2'b00) 
+                    if (car_out == 2'b00) 
                     begin
                         state <= s8;
                         space_count <= 3'b011;
                         near_slot <= 2'b00;
                         door_open_exit <= 1'b1;
-                    end else if (car_out[1:0] == 2'b11) 
+                    end else if (car_out == 2'b11) 
                     begin
                         state <= s1;
                         space_count <= 3'b011;
@@ -281,15 +282,15 @@ module FSM (
                     space_count <= 3'b001;
                     near_slot <= 2'b10;
                     door_open <= 1'b1;
-                end else if (car_out[2]) 
+                end else if (car_out_deb) 
                 begin
-                    if (car_out[1:0] == 2'b01) 
+                    if (car_out == 2'b01) 
                     begin
                         state <= s8;
                         space_count <= 3'b011;
                         near_slot <= 2'b00;
                         door_open_exit <= 1'b1;
-                    end else if (car_out[1:0] == 2'b11) 
+                    end else if (car_out == 2'b11) 
                     begin
                         state <= s2;
                         space_count <= 3'b011;
@@ -307,21 +308,21 @@ module FSM (
                     state <= full;
                     full_garage <= 1'b1;
                     door_open <= 1'b1;
-                end else if (car_out[2]) 
+                end else if (car_out_deb) 
                 begin
-                    if (car_out[1:0] == 2'b00) 
+                    if (car_out == 2'b00) 
                     begin
                         state <= s10;
                         space_count <= 3'b010;
                         near_slot <= 2'b00;
                         door_open_exit <= 1'b1;
-                    end else if (car_out[1:0] == 2'b01) 
+                    end else if (car_out == 2'b01) 
                     begin
                         state <= s9;
                         space_count <= 3'b010;
                         near_slot <= 2'b01;
                         door_open_exit <= 1'b1;
-                    end else if (car_out[1:0] == 2'b11) 
+                    end else if (car_out == 2'b11) 
                     begin  // be carefull
                         state <= s3;
                         space_count <= 3'b010;
@@ -340,15 +341,15 @@ module FSM (
                     space_count <= 3'b001;
                     near_slot <= 2'b01;
                     door_open <= 1'b1;
-                end else if (car_out[2]) 
+                end else if (car_out_deb) 
                 begin
-                    if (car_out[1:0] == 2'b10) 
+                    if (car_out == 2'b10) 
                     begin
                         state <= s8;
                         space_count <= 3'b011;
                         near_slot <= 2'b00;
                         door_open_exit <= 1'b1;
-                    end else if (car_out[1:0] == 2'b11) 
+                    end else if (car_out == 2'b11) 
                     begin
                         state <= s4;
                         space_count <= 3'b011;
@@ -367,21 +368,21 @@ module FSM (
                     space_count <= 3'b000;
                     full_garage <= 1'b1;   // be carefull
                     door_open <= 1'b1;
-                end else if (car_out[2]) 
+                end else if (car_out_deb) 
                 begin
-                    if (car_out[1:0] == 2'b00) 
+                    if (car_out == 2'b00) 
                     begin
                         state <= s12;
                         space_count <= 3'b010;
                         near_slot <= 2'b00;
                         door_open_exit <= 1'b1;
-                    end else if (car_out[1:0] == 2'b10) 
+                    end else if (car_out == 2'b10) 
                     begin
                         state <= s9;
                         space_count <= 3'b010;
                         near_slot <= 2'b01;
                         door_open_exit <= 1'b1;
-                    end else if (car_out[1:0] == 2'b11) 
+                    end else if (car_out == 2'b11) 
                     begin
                         state <= s5;
                         space_count <= 3'b010; //be carefull
@@ -400,21 +401,21 @@ module FSM (
                     space_count <= 3'b000;
                     full_garage <= 1'b1;
                     door_open <= 1'b1;
-                end else if (car_out[2]) 
+                end else if (car_out_deb) 
                 begin
-                    if (car_out[1:0] == 2'b10) 
+                    if (car_out == 2'b10) 
                     begin
                         state <= s10;
                         space_count <= 3'b010;
                         near_slot <= 2'b00;
                         door_open_exit <= 1'b1;
-                    end else if (car_out[1:0] == 2'b01) 
+                    end else if (car_out == 2'b01) 
                     begin
                         state <= s12;
                         space_count <= 3'b010;
                         near_slot <= 2'b01;
                         door_open_exit <= 1'b1;
-                    end else if (car_out[1:0] == 2'b11) 
+                    end else if (car_out == 2'b11) 
                     begin
                         state <= s6;
                         space_count <= 3'b010;
@@ -434,30 +435,30 @@ module FSM (
                 begin
                     full_garage <= 1'b0;
                 end
-                if (car_out[2]) 
+                if (car_out_deb) 
                 begin
-                    if (car_out[1:0] == 2'b00) 
+                    if (car_out == 2'b00) 
                     begin
                         state <= s14;
                         space_count <= 3'b001;
                         near_slot <= 2'b00;
                         door_open_exit <= 1'b1;
                         full_garage <= 1'b0;
-                    end else if (car_out[1:0] == 2'b01) 
+                    end else if (car_out == 2'b01) 
                     begin
                         state <= s13;
                         space_count <= 3'b001;
                         near_slot <= 2'b01;
                         door_open_exit <= 1'b1;
                         full_garage <= 1'b0;
-                    end else if (car_out[1:0] == 2'b10) 
+                    end else if (car_out == 2'b10) 
                     begin
                         state <= s11;
                         space_count <= 3'b001;
                         near_slot <= 2'b10;
                         door_open_exit <= 1'b1;
                         full_garage <= 1'b0;
-                    end else if (car_out[1:0] == 2'b11) 
+                    end else if (car_out == 2'b11) 
                     begin
                         state <= s7;
                         space_count <= 3'b001;
@@ -515,7 +516,7 @@ module FSM_tb;
 
     initial begin
         $dumpfile("FSM_tb.vcd");
-        $dumpvars(0, FSM_tb);
+        $dumpvars(0, car_in, car_out, state, space_count, near_slot, door_open, door_open_exit, full_garage);
 
         car_in = 0;
         car_out = 3'b000;
@@ -523,43 +524,7 @@ module FSM_tb;
         #25;
         rst = 0;
         #12.5
-
-
-        input_file = $fopen("input.txt", "r");
-        output_file = $fopen("output.txt", "w");
-
-        if (input_file == 0 || output_file == 0) begin
-            $display("Failed to open file.");
-            $finish;
-        end
-
-        while (!$feof(input_file)) begin
-            scan_file = $fscanf(input_file, "%4b\n", input_data);
-            car_in = input_data[3];
-            car_out = input_data[2:0];
-            $display("Read input: car_in=%b, car_out=%b", car_in, car_out); 
-            #25;
-            if (space_count == 0) 
-            begin
-                $fwrite(output_file, "%4b [%d,-]\t", state, space_count);
-            end else
-            begin
-                $fwrite(output_file, "%4b [%d,%d]\t", state, space_count, near_slot);
-            end
-            if (door_open | door_open_exit) begin
-                $fwrite(output_file, "Door");
-            end else if (full_garage) begin
-                $fwrite(output_file, "Full");
-            end
-            $fwrite(output_file, "\n");
-        end
-
-        $fclose(input_file);
-        $fclose(output_file);
         $finish;
-
-
-
     end
 
 endmodule
@@ -602,4 +567,39 @@ endmodule
         // car_out = 3'b000; #30
         // // Finish simulation
         // #50
+        // $finish;
+
+
+
+                // input_file = $fopen("input.txt", "r");
+        // output_file = $fopen("output.txt", "w");
+
+        // if (input_file == 0 || output_file == 0) begin
+        //     $display("Failed to open file.");
+        //     $finish;
+        // end
+
+        // while (!$feof(input_file)) begin
+        //     scan_file = $fscanf(input_file, "%4b\n", input_data);
+        //     car_in = input_data[3];
+        //     car_out = input_data[2:0];
+        //     $display("Read input: car_in=%b, car_out=%b", car_in, car_out); 
+        //     #25;
+        //     if (space_count == 0) 
+        //     begin
+        //         $fwrite(output_file, "%4b [%d,-]\t", state, space_count);
+        //     end else
+        //     begin
+        //         $fwrite(output_file, "%4b [%d,%d]\t", state, space_count, near_slot);
+        //     end
+        //     if (door_open | door_open_exit) begin
+        //         $fwrite(output_file, "Door");
+        //     end else if (full_garage) begin
+        //         $fwrite(output_file, "Full");
+        //     end
+        //     $fwrite(output_file, "\n");
+        // end
+
+        // $fclose(input_file);
+        // $fclose(output_file);
         // $finish;
