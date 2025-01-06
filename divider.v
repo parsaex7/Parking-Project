@@ -17,12 +17,14 @@ begin
     begin
         cnt <= 0;
         clk_out <= 0;
-    end
-    cnt <= cnt + 1;
-    if (cnt == toggles)
+    end else
     begin
-        cnt <= 0;
-        clk_out <= ~clk_out;
+        cnt <= cnt + 1;
+        if (cnt == toggles)
+        begin
+            cnt <= 0;
+            clk_out <= ~clk_out;
+        end
     end
 end
 
