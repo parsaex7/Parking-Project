@@ -13,8 +13,11 @@ module debouncer (
             q0 <= 0;
             sig_debounced <= 0;
         end
-        q1 <= q0;
-        q0 <= sig;
-        sig_debounced <= q0 & ~q1;
+        else
+        begin
+            q1 <= q0;
+            q0 <= sig;
+            sig_debounced <= q0 & ~q1;
+        end
     end
 endmodule

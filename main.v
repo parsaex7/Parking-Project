@@ -8,7 +8,9 @@ module main(
     output reg door_open,
     output reg door_open_exit,
     output reg full_garage,
-    output reg [3:0] state
+    output reg [3:0] state,
+    output reg seg_select,
+    output reg [7:0] seg_data
 );
 
     reg car_in_deb;
@@ -20,7 +22,9 @@ module main(
     debouncer f2(clk, rst, car_in, car_in_deb);  
     debouncer f3(clk, rst, car_out[2], car_out_deb);
 
-    doorFreq f4(clk, rst, door_open_first, door_open); //return door_open 
+    doorFreq f4(clk, rst, door_open_first, door_open); //return door_open blinking
+
+    segmentDivider f5(clk_in, rst, space_count, near_slot, seg_data, seg_select); //return 7 seg data and select
 
     FSM f4(car_in_deb, car_out_deb, car_out[1:0], clk, rst, space_count, near_slot, door_open_first, door_open_exit, full_garage, state);
     
