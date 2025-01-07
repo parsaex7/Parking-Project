@@ -35,7 +35,7 @@ module FSM (
         end
         
         
-        
+        else begin
         case (state)
             empty: 
             begin
@@ -469,6 +469,7 @@ module FSM (
                 end
             end
         endcase
+        end
     end
 endmodule
 
