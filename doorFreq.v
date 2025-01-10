@@ -2,11 +2,13 @@ module doorFreq(
     input clk,
     input rst,
     input car_in,
+    input car_out,
     output reg door_open
 );
+
     reg tmp = 1'b0;
     reg [6:0] cnt = 7'b0000000;
-    always @(posedge rst or posedge car_in or clk)
+    always @(posedge rst or posedge clk)
     begin
         if (rst) 
         begin
@@ -14,11 +16,11 @@ module doorFreq(
             door_open <= 0;
             tmp <= 1'b0;
         end
-        else if (car_in)
+        else if (car_in || car_out)
         begin
             tmp <= 1;
         end
-        if (tmp && cnt < 7'b1010000)
+        if (tmp && cnt < 7'b1010000) // 80 toggle  because the clock frequency is 4Hz
         begin
             door_open <= ~door_open;
             cnt <= cnt + 1;

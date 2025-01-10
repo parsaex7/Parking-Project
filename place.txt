@@ -5,7 +5,6 @@ NET "car_out[0]" LOC = P169;
 NET "clk_in" LOC = P184;
 NET "rst" LOC = P183;
 NET "door_open" LOC = P50;
-NET "door_open_exit" LOC = P42;
 NET "full_garage" LOC = P51;
 NET "state[3]" LOC = P61;
 NET "state[2]" LOC = P62;
