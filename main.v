@@ -4,19 +4,20 @@ module main(
     input clk_in,
     input rst,
     output wire door_open,
-    output wire full_garage,
+    output wire full_signal,
     output wire [3:0] state,
     output wire [4:0] seg_select,
     output wire [7:0] seg_data
 );
 
-
+    wire full_garage;
     wire car_in_deb;
     wire car_out_deb;
     wire door_open_first;
     wire door_open_exit;
-    wire clk_100hz;
-    wire clk_500kHz;
+    wire clk_1hz;
+    wire clk_4hz;
+    wire clk_1kHz;
     wire clk_60hz;
     wire [2:0] space_count; // 7 seg
     wire [1:0] near_slot; // 7 seg
@@ -25,20 +26,21 @@ module main(
     divider f1(
         .clk(clk_in),
         .reset(rst),
-        .clk_out(clk_100hz),
-        .clk_500kHz(clk_500kHz),
-        .clk_60hz(clk_60hz)
+        .clk_1hz(clk_1hz), // for fullGarage
+        .clk_4hz(clk_4hz), // for 2hz blinking
+        .clk_1kHz(clk_1kHz),  // for debouncer and fsm
+        .clk_60hz(clk_60hz)   // for 7seg
     );
 
     debouncer f2(
-        .clk(clk_500kHz),
+        .clk(clk_1kHz),
         .reset(rst),
         .sig(car_in),
         .sig_debounced(car_in_deb)
     );
 
     debouncer f3(
-        .clk(clk_500kHz),
+        .clk(clk_1kHz),
         .reset(rst),
         .sig(car_out[2]),
         .sig_debounced(car_out_deb)
@@ -46,7 +48,7 @@ module main(
 
     // change car_in LED to BLINKING mode
     doorFreq f4(
-        .clk(clk_100hz),
+        .clk(clk_4hz),
         .rst(rst),
         .car_in(door_open_first),
         .car_out(door_open_exit),
@@ -63,11 +65,18 @@ module main(
         .seg_select(seg_select)
     );
 
-    FSM f6(
+    fullFreq f6(
+        .clk(clk_1hz),
+        .rst(rst),
+        .full_garage(full_garage),
+        .full_signal(full_signal)
+    );
+
+    FSM f7(
         .car_in(~car_in_deb),
         .car_out(~car_out_deb),
         .car_out_bits(car_out[1:0]),
-        .clk(clk_100hz),
+        .clk(clk_1khz),
         .rst(rst),
         .space_count(space_count),
         .near_slot(near_slot),

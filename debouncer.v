@@ -20,7 +20,7 @@ module debouncer (
             q2 <= q1;
             q1 <= q0;
             q0 <= sig;
-            sig_debounced <= q0 & ~q2;
+            sig_debounced <= q0 && q1 && ~q2;
         end
     end
 endmodule

@@ -1,54 +1,83 @@
 module divider (
     input wire clk,
     input wire reset,
-    output reg clk_out,
-    output reg clk_500kHz,
-    output reg clk_60Hz
+    output reg clk_1hz,
+    output reg clk_4Hz,
+    output reg clk_1kHz,
+    output reg clk_60hz
 );
 
 parameter clkFerq = 40000000; //40MHz
-parameter targetFreq = 4;  // 4Hz
-parameter cycle = clkFerq / targetFreq;
-parameter toggles = cycle / 2;
-parameter targetFreq_500kHz = 500000;  // 500kHz
-parameter cycle_500kHz = clkFerq / targetFreq;
-parameter toggles_500kHz = cycle / 2;
+parameter targetFreq_4hz = 4;  // 4Hz
+parameter cycle_4hz = clkFerq / targetFreq_4hz;
+parameter toggles_4hz = cycle_4hz / 2;
+parameter targetFreq_1kHz = 1000;  // 1kHz
+parameter cycle_1kHz = clkFerq / targetFreq_1kHz;
+parameter toggles_1kHz = cycle_1kHz / 2;
 parameter targetFreq_60Hz = 60;  // 60Hz
 parameter cycle_60Hz = clkFerq / targetFreq;
-parameter toggles_60Hz = cycle / 2;
+parameter toggles_60Hz = cycle_60Hz / 2;
+parameter targetFreq_1hz = 1;
+parameter cycle_1hz = clkFerq / targetFreq_1hz;
+parameter toggle_1hz = cycle_1hz / 2;
 
-reg [25:0] cnt;
-reg [25:0] cnt_500kHz;
+reg [25:0] cnt_4hz;
+reg [25:0] cnt_1kHz;
 reg [25:0] cnt_60Hz;
+reg [25:0] cnt_1hz;
 
 always @(posedge clk or posedge reset)
 begin
     if (reset)
     begin
-        cnt <= 0;
-        clk_out <= 0;
-        cnt_500kHz <= 0;
-        clk_500kHz <= 0;
+        cnt_4hz <= 0;
+        clk_4hz <= 0;
+        cnt_1kHz <= 0;
+        clk_1kHz <= 0;
         cnt_60Hz <= 0;
         clk_60Hz <= 0;
+        cnt_1hz <= 0;
+        clk_1hz <= 0;
     end else
     begin
-        cnt <= cnt + 1;
-        cnt_500kHz <= cnt_500kHz + 1;
-        if (cnt == toggles)
+        if (cnt_4hz < cycle_4hz - 1) 
         begin
-            cnt <= 0;
-            clk_out <= ~clk_out;
-        end
-        if (cnt_500kHz == toggles_500kHz)
+            cnt_4hz <= cnt_4hz + 1;
+        end 
+        else 
         begin
-            cnt_500kHz <= 0;
-            clk_500kHz <= ~clk_500kHz;
+            cnt_4hz <= 0;
+            clk_4hz <= ~clk_4hz;
         end
-        if (cnt_60Hz == toggles_60Hz)
+
+        if (cnt_1kHz < cycle_1kHz - 1) 
+        begin
+            cnt_1kHz <= cnt_1kHz + 1;
+        end 
+        else 
+        begin
+            cnt_1kHz <= 0;
+            clk_1kHz <= ~clk_1kHz;
+        end
+
+        if (cnt_60Hz < cycle_60Hz - 1) 
+        begin
+            cnt_60Hz <= cnt_60Hz + 1;
+        end 
+        else
         begin
             cnt_60Hz <= 0;
             clk_60Hz <= ~clk_60Hz;
+        end
+
+        if (cnt_1hz < cycle_1hz - 1) 
+        begin
+            cnt_1hz <= cnt_1hz + 1;
+        end 
+        else 
+        begin
+            cnt_1hz <= 0;
+            clk_1hz <= ~clk_1hz;
         end
     end
 end

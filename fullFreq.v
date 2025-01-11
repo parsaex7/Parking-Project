@@ -3,7 +3,7 @@ module fullFreq(
     input rst,
     input full_garage,
     output reg full_signal
-)
+);
 
 reg tmp;
 reg cnt[3:0];
