@@ -1,61 +1,48 @@
 module fullFreq(
-    input clk,
-    input rst,
-    input full_garage,
-    output reg full_signal
+    input clk,   
+    input rst,  
+    input full_signal,
+    output reg out_signal
 );
 
-parameter clk_freq = 1000;
-parameter targetFreq = 0.5;
-parameter cycle = clk_freq / targetFreq;
-parameter toggle = cycle / 2;
-parameter blink = 3;
+    parameter CLK_FREQ = 1000;
+    parameter TOGGLE_FREQ = 1;
+    parameter TOGGLE_COUNT = CLK_FREQ / (2 * TOGGLE_FREQ);
+    parameter TOTAL_TOGGLES = 6;
 
-reg flag;
-reg [25:0] repeatCnt;
-reg [25:0] cnt;
+    reg [15:0] cnt;
+    reg [2:0] toggle_counter;
+    reg toggling;
 
-always @(posedge rst or posedge clk)
-begin
-    if (rst)
-    begin
-        flag <= 1'b0;
-        cnt <= 0;
-        repeatCnt <= 0;
-    end
-    else 
-    begin
-        if (full_garage && ~flag)
-        begin
-            flag <= 1'b1;
+    always @(posedge clk or posedge rst) begin
+        if (rst) begin
             cnt <= 0;
-            full_signal <= 1'b1;
-            repeatCnt <= 0;
-        end
-        if (flag && (repeatCnt == blink))
-        begin
-            cnt <= 0;
-            full_signal <= 1'b0;
-            flag <= 0;
-            repeatCnt <= 0;
-        end
-        else if (flag)
-        begin
-            if (cnt == toggle)
-            begin
-                full_signal <= ~full_signal;
-                repeatCnt <= repeatCnt + 1;
+            toggle_counter <= 0;
+            out_signal <= 0;
+            toggling <= 0;
+        end else begin
+            if (full_signal && !toggling) begin
+                toggling <= 1;
                 cnt <= 0;
+                toggle_counter <= 0;
+                out_signal <= 1;
+            end
+
+            if (toggling) begin
+                if (cnt < TOGGLE_COUNT - 1) begin
+                    cnt <= cnt + 1;
+                end else begin
+                    cnt <= 0;
+                    if (toggle_counter < TOTAL_TOGGLES - 1) begin
+                        out_signal <= ~out_signal;
+                        toggle_counter <= toggle_counter + 1;
+                    end else begin
+                        out_signal <= 0;
+                        toggling <= 0;
+                    end
+                end
             end
         end
-        else 
-        begin
-            cnt <= 0;
-            full_signal <= 1'b0;
-            flag <= 0;
-            repeatCnt <= 0;
-        end
     end
-end
 
 endmodule

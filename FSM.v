@@ -40,7 +40,7 @@ module FSM (
             empty: 
             begin
                 door_open <= 1'b0;
-                door_open_exit = 1'b0;
+                door_open_exit <= 1'b0;
                 if (car_in) 
                 begin
                     space_count <= 3'b011;
@@ -72,7 +72,7 @@ module FSM (
             s2: 
             begin
                 door_open <= 1'b0;
-                door_open_exit = 1'b0;
+                door_open_exit <= 1'b0;
                 if (car_in) 
                 begin
                     state <= s3;
@@ -119,7 +119,7 @@ module FSM (
             s4: 
             begin
                 door_open <= 1'b0;
-                door_open_exit = 1'b0;
+                door_open_exit <= 1'b0;
                 if (car_in) 
                 begin
                     state <= s6;
@@ -140,7 +140,7 @@ module FSM (
             s5: 
             begin
                 door_open <= 1'b0;
-                door_open_exit = 1'b0;
+                door_open_exit <= 1'b0;
                 if (car_in) 
                 begin
                     state <= s7;
@@ -167,7 +167,7 @@ module FSM (
             s6: 
             begin
                 door_open <= 1'b0;
-                door_open_exit = 1'b0;
+                door_open_exit <= 1'b0;
                 if (car_in) 
                 begin
                     state <= s7;
@@ -194,7 +194,7 @@ module FSM (
             s7: 
             begin
                 door_open <= 1'b0;
-                door_open_exit = 1'b0;
+                door_open_exit <= 1'b0;
                 if (car_in) 
                 begin
                     state <= full;
@@ -227,7 +227,7 @@ module FSM (
             s8: 
             begin
                 door_open <= 1'b0;
-                door_open_exit = 1'b0;
+                door_open_exit <= 1'b0;
                 if (car_in) 
                 begin
                     state <= s9;
@@ -248,7 +248,7 @@ module FSM (
             s9: 
             begin
                 door_open <= 1'b0;
-                door_open_exit = 1'b0;
+                door_open_exit <= 1'b0;
                 if (car_in) 
                 begin
                     state <= s11;
@@ -275,7 +275,7 @@ module FSM (
             s10: 
             begin
                 door_open <= 1'b0;
-                door_open_exit = 1'b0;
+                door_open_exit <= 1'b0;
                 if (car_in) 
                 begin
                     state <= s11;
@@ -302,7 +302,7 @@ module FSM (
             s11: 
             begin
                 door_open <= 1'b0;
-                door_open_exit = 1'b0;
+                door_open_exit <= 1'b0;
                 if (car_in) 
                 begin
                     state <= full;
@@ -334,7 +334,7 @@ module FSM (
             s12: 
             begin
                 door_open <= 1'b0;
-                door_open_exit = 1'b0;
+                door_open_exit <= 1'b0;
                 if (car_in) 
                 begin
                     state <= s13;
@@ -361,7 +361,7 @@ module FSM (
             s13: 
             begin
                 door_open <= 1'b0;
-                door_open_exit = 1'b0;
+                door_open_exit <= 1'b0;
                 if (car_in) 
                 begin
                     state <= full;
@@ -394,7 +394,7 @@ module FSM (
             s14: 
             begin
                 door_open <= 1'b0;
-                door_open_exit = 1'b0;
+                door_open_exit <= 1'b0;
                 if (car_in) 
                 begin
                     state <= full;
@@ -427,7 +427,7 @@ module FSM (
             full: 
             begin
                 door_open <= 1'b0;
-                door_open_exit = 1'b0;
+                door_open_exit <= 1'b0;
                 if (car_in)
                 begin
                     full_garage <= 1'b1;

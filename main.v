@@ -69,8 +69,8 @@ module main(
     fullFreq f6(
         .clk(clk_1kHz),
         .rst(rst),
-        .full_garage(full_garage),
-        .full_signal(full_signal)
+        .full_signal(full_garage),
+        .out_signal(full_signal)
     );
 
     FSM f7(
