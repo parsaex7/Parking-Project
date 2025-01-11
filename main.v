@@ -74,13 +74,13 @@ module main(
 
     FSM f7(
         .car_in(~car_in_deb),
-        .car_out(~car_out_deb),
-        .car_out_bits(car_out[1:0]),
+        .car_out_deb(~car_out_deb),
+        .car_out(car_out[1:0]),
         .clk(clk_1khz),
         .rst(rst),
         .space_count(space_count),
         .near_slot(near_slot),
-        .door_open_first(door_open_first),
+        .door_open(door_open_first),
         .door_open_exit(door_open_exit),
         .full_garage(full_garage),
         .state(state)

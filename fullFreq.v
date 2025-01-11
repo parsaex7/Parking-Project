@@ -19,10 +19,10 @@ begin
     begin
         tmp <= 1'b1;
     end
-    if (tmp && cnt < 4'b0011)
+    if (tmp && (cnt < 4'b0011))
     begin
         cnt <= cnt + 1;
-        full_signal <= ~full;
+        full_signal <= ~full_signal;
     end 
     else
     begin
