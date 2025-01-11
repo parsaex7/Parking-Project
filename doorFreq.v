@@ -6,32 +6,60 @@ module doorFreq(
     output reg door_open
 );
 
-    reg tmp = 1'b0;
-    reg [6:0] cnt = 7'b0000000;
-    always @(posedge rst or posedge clk or posedge car_in or posedge car_out)
+    reg flag = 1'b0;
+    reg [25:0] cnt = 0;
+    reg [25:0] repeatCnt = 0;
+
+    parameter clk_freq = 1000;
+    parameter targetFreq = 2;
+    parameter cycle = clk_freq / targetFreq;
+    parameter toggle = cycle / 2;
+    parameter blink = 80;
+
+
+
+    always @(posedge rst or posedge clk)
     begin
         if (rst) 
         begin
-            cnt <= 7'b0000000;
+            cnt <= 0;
             door_open <= 0;
-            tmp <= 1'b0;
+            flag <= 1'b0;
+            repeatCnt <= 0;
         end
-        else if ((car_in || car_out) && ~tmp) 
+        else if ((car_in || car_out) && ~flag) 
         begin
-            tmp <= 1;
+            flag <= 1;
             cnt <= 0;
             door_open <= 1;
         end 
-        if (tmp && cnt < 7'b1010000) // 80 toggle  because the clock frequency is 4Hz
+        
+        if (flag && (repeatCnt == blink))
         begin
-            door_open <= ~door_open;
-            cnt <= cnt + 1;
-        end
-        else if (cnt == 7'b1010000)
-        begin
-            cnt <= 7'b0000000;
+            flag <= 0;
+            repeatCnt <= 0;
+            cnt <= 0;
             door_open <= 0;
-            tmp <= 0;
+        end 
+        else if (flag)
+        begin
+            if (cnt == toggle)
+            begin
+                door_open <= ~door_open;
+                repeatCnt <= repeatCnt + 1;
+                cnt <= 0;
+            end
+            else
+            begin
+                cnt <= cnt + 1;
+            end
+        end
+        else 
+        begin
+            flag <= 0;
+            repeatCnt <= 0;
+            cnt <= 0;
+            door_open <= 0;
         end
     end
 endmodule

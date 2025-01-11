@@ -29,7 +29,7 @@ module main(
         .clk_1hz(clk_1hz), // for fullGarage
         .clk_4hz(clk_4hz), // for 2hz blinking
         .clk_1kHz(clk_1kHz),  // for debouncer and fsm
-        .clk_60hz(clk_60hz)   // for 7seg
+        .clk_60Hz(clk_60hz)   // for 7seg
     );
 
     debouncer f2(
@@ -47,8 +47,9 @@ module main(
     );
 
     // change car_in LED to BLINKING mode
+    // TODO: i should change it frequency because some issue
     doorFreq f4(
-        .clk(clk_4hz),
+        .clk(clk_1kHz),
         .rst(rst),
         .car_in(door_open_first),
         .car_out(door_open_exit),
@@ -66,7 +67,7 @@ module main(
     );
 
     fullFreq f6(
-        .clk(clk_1hz),
+        .clk(clk_1kHz),
         .rst(rst),
         .full_garage(full_garage),
         .full_signal(full_signal)

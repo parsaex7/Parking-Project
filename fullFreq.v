@@ -5,30 +5,51 @@ module fullFreq(
     output reg full_signal
 );
 
-reg tmp;
-reg cnt[3:0];
+parameter clk_freq = 1000;
+parameter targetFreq = 0.5;
+parameter cycle = clkFerq / targetFreq;
+parameter toggle = cycle / 2;
+parameter blink = 3;
+
+reg flag;
+reg [25:0] repeatCnt;
+reg [25:0] cnt;
 
 always @(posedge rst or posedge clk or posedge full_garage) 
 begin
     if (rst)
     begin
-        tmp <= 1'b0;
-        cnt <= 4'b0000;
+        flag <= 1'b0;
+        cnt <= 0;
+        repeatCnt <= 0;
     end
     if (full_garage)
     begin
-        tmp <= 1'b1;
+        flag <= 1'b1;
+        cnt <= 0;
     end
-    if (tmp && (cnt < 4'b0011))
-    begin
-        cnt <= cnt + 1;
-        full_signal <= ~full_signal;
-    end 
-    else
+    if (flag && (repeatCnt == blink))
     begin
         cnt <= 0;
-        tmp <= 0;
         full_signal <= 1'b0;
+        flag <= 0;
+        repeatCnt <= 0;
+    end
+    else if (flag)
+    begin
+        if (cnt == toggle)
+        begin
+            full_signal <= ~full_signal;
+            repeatCnt <= repeatCnt + 1;
+            cnt <= 0;
+        end
+    end
+    else 
+    begin
+        cnt <= 0;
+        full_signal <= 1'b0;
+        flag <= 0;
+        repeatCnt <= 0;
     end
 end
 

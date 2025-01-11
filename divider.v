@@ -2,9 +2,9 @@ module divider (
     input wire clk,
     input wire reset,
     output reg clk_1hz,
-    output reg clk_4Hz,
+    output reg clk_4hz,
     output reg clk_1kHz,
-    output reg clk_60hz
+    output reg clk_60Hz
 );
 
 parameter clkFerq = 40000000; //40MHz
@@ -15,7 +15,7 @@ parameter targetFreq_1kHz = 1000;  // 1kHz
 parameter cycle_1kHz = clkFerq / targetFreq_1kHz;
 parameter toggles_1kHz = cycle_1kHz / 2;
 parameter targetFreq_60Hz = 60;  // 60Hz
-parameter cycle_60Hz = clkFerq / targetFreq;
+parameter cycle_60Hz = clkFerq / targetFreq_60Hz;
 parameter toggles_60Hz = cycle_60Hz / 2;
 parameter targetFreq_1hz = 1;
 parameter cycle_1hz = clkFerq / targetFreq_1hz;
