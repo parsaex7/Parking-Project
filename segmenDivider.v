@@ -23,7 +23,7 @@ always @(posedge clk or posedge rst) begin
         if (space_count == 0) begin
             if (seg_select == 5'b00001) begin
                 seg_select <= 5'b00100;
-                seg_data <= 8'b00000001;
+                seg_data <= 8'b01000000;
             end else if (seg_select == 5'b00100) begin
                 seg_select <= 5'b00001;
                 seg_data <= seg1;

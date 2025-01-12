@@ -199,7 +199,7 @@ module FSM (
                 begin
                     state <= full;
                     space_count <= 3'b000;
-                    full_garage <= 1'b1;
+                    full_garage <= 1'b0;
                     door_open <= 1'b1;  //be carefull
                 end else if (car_out_deb) 
                 begin
@@ -366,7 +366,7 @@ module FSM (
                 begin
                     state <= full;
                     space_count <= 3'b000;
-                    full_garage <= 1'b1;   // be carefull
+                    full_garage <= 1'b0;   // be carefull
                     door_open <= 1'b1;
                 end else if (car_out_deb) 
                 begin
@@ -399,7 +399,7 @@ module FSM (
                 begin
                     state <= full;
                     space_count <= 3'b000;
-                    full_garage <= 1'b1;
+                    full_garage <= 1'b0;
                     door_open <= 1'b1;
                 end else if (car_out_deb) 
                 begin
@@ -472,135 +472,3 @@ module FSM (
         end
     end
 endmodule
-
-
-`timescale 1ns/1ps
-
-module FSM_tb;
-
-    // Inputs
-    reg car_in;
-    reg [2:0] car_out;
-    reg clk;
-    reg rst;
-
-    // Outputs
-    wire [2:0] space_count;
-    wire [1:0] near_slot;
-    wire door_open;
-    wire door_open_exit;
-    wire full_garage;
-    wire [3:0] state;
-
-    // Instantiate the FSM module
-    FSM uut (
-        .car_in(car_in),
-        .car_out(car_out),
-        .clk(clk),
-        .rst(rst),
-        .space_count(space_count),
-        .near_slot(near_slot),
-        .door_open(door_open),
-        .door_open_exit(door_open_exit),
-        .full_garage(full_garage),
-        .state(state)
-    );
-
-    // Clock generation
-    initial begin
-        clk = 0;
-        forever #12.5 clk = ~clk;
-    end
-    
-    integer input_file, output_file, scan_file;
-    reg [3:0] input_data;
-
-    initial begin
-        $dumpfile("FSM_tb.vcd");
-        $dumpvars(0, car_in, car_out, state, space_count, near_slot, door_open, door_open_exit, full_garage);
-
-        car_in = 0;
-        car_out = 3'b000;
-        rst = 1;
-        #25;
-        rst = 0;
-        #12.5
-        $finish;
-    end
-
-endmodule
-
-
-
-        //         // Initialize Inputs
-        // rst = 1'b1; #25
-        // rst = 1'b0;
-
-        // car_in = 0;
-        // car_out = 3'b000; #30
-
-        // // Test case 1: Add a car
-        // car_in = 1; #25
-        // car_in = 0; #30
-
-        // // Test case 2: Add another car
-        // car_in = 1; #25
-        // car_in = 0; #30
-
-        // // Test case 3: Remove a car from slot 0
-        // car_out = 3'b100; #25 
-        // car_out = 3'b000; #30
-
-        // // Test case 4: Add another car
-        // car_in = 1; #25
-        // car_in = 0; #30
-
-        // // Test case 5: Remove a car from slot 1
-        // car_out = 3'b101; #25
-        // car_out = 3'b000; #30
-
-        // // Test case 6: Fill the garage
-        // car_in = 1; #200
-        // car_in = 0; #30
-
-        // // Test case 7: Remove a car from slot 3
-        // car_out = 3'b111; #25
-        // car_out = 3'b000; #30
-        // // Finish simulation
-        // #50
-        // $finish;
-
-
-
-                // input_file = $fopen("input.txt", "r");
-        // output_file = $fopen("output.txt", "w");
-
-        // if (input_file == 0 || output_file == 0) begin
-        //     $display("Failed to open file.");
-        //     $finish;
-        // end
-
-        // while (!$feof(input_file)) begin
-        //     scan_file = $fscanf(input_file, "%4b\n", input_data);
-        //     car_in = input_data[3];
-        //     car_out = input_data[2:0];
-        //     $display("Read input: car_in=%b, car_out=%b", car_in, car_out); 
-        //     #25;
-        //     if (space_count == 0) 
-        //     begin
-        //         $fwrite(output_file, "%4b [%d,-]\t", state, space_count);
-        //     end else
-        //     begin
-        //         $fwrite(output_file, "%4b [%d,%d]\t", state, space_count, near_slot);
-        //     end
-        //     if (door_open | door_open_exit) begin
-        //         $fwrite(output_file, "Door");
-        //     end else if (full_garage) begin
-        //         $fwrite(output_file, "Full");
-        //     end
-        //     $fwrite(output_file, "\n");
-        // end
-
-        // $fclose(input_file);
-        // $fclose(output_file);
-        // $finish;

@@ -7,12 +7,12 @@ module doorFreq(
 );
 
     parameter CLK_FREQ = 1000;
-    parameter TOGGLE_FREQ = 2; 
+    parameter TOGGLE_FREQ = 4; 
     parameter TOGGLE_COUNT = CLK_FREQ / (2 * TOGGLE_FREQ);
     parameter TOTAL_TOGGLES = 40;
 
     reg [25:0] cnt;
-    reg [4:0] toggle_counter;
+    reg [6:0] toggle_counter;
     reg toggling;
 
     always @(posedge clk or posedge rst) begin
@@ -40,10 +40,11 @@ module doorFreq(
                     end else begin
                         door_open <= 0;
                         toggling <= 0;
+								toggle_counter <= 0;
                     end
                 end
             end
         end
     end
 
-endmodule
+endmodule	

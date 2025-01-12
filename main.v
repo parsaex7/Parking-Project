@@ -7,7 +7,8 @@ module main(
     output wire full_signal,
     output wire [3:0] state,
     output wire [4:0] seg_select,
-    output wire [7:0] seg_data
+    output wire [7:0] seg_data,
+	 output tmp
 );
 
     wire full_garage;
@@ -19,6 +20,7 @@ module main(
     wire clk_250hz;
     wire [2:0] space_count; // 7 seg
     wire [1:0] near_slot; // 7 seg
+	 assign tmp = rst;
 
     //4 Hz clock
     divider f1(
@@ -54,7 +56,7 @@ module main(
 
     // segmentDivider module to generate the 7-segment display data
     segmentDivider f5(
-        .clk(clk_250Hz),
+        .clk(clk_250hz),
         .rst(rst),
         .space_count(space_count),
         .near_slot(near_slot),
@@ -73,7 +75,7 @@ module main(
         .car_in(car_in_deb),
         .car_out_deb(car_out_deb),
         .car_out(car_out[1:0]),
-        .clk(clk_1khz),
+        .clk(clk_1kHz),
         .rst(rst),
         .space_count(space_count),
         .near_slot(near_slot),

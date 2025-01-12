@@ -6,7 +6,7 @@ module sevenSeg(
 always @(data)
 begin
     case(data)
-    3'b000 : seg <= 8'b01111110;
+    3'b000 : seg <= 8'b00111111;
     3'b001 : seg <= 8'b00000110;
     3'b010 : seg <= 8'b01011011;
     3'b011 : seg <= 8'b01001111;

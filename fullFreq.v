@@ -5,10 +5,8 @@ module fullFreq(
     output reg out_signal
 );
 
-    parameter CLK_FREQ = 1000;
-    parameter TOGGLE_FREQ = 0.5;
-    parameter TOGGLE_COUNT = CLK_FREQ / (2 * TOGGLE_FREQ);
-    parameter TOTAL_TOGGLES = 3;
+    parameter TOGGLE_COUNT = 250;
+    parameter TOTAL_TOGGLES = 5;
 
     reg [25:0] cnt;
     reg [2:0] toggle_counter;
