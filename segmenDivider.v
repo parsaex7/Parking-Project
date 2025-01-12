@@ -18,22 +18,25 @@ always @(posedge clk or posedge rst) begin
         seg_select <= 5'b00001;
         seg_data <= 8'b00000000;
     end
-    else if (space_count == 3'b000) begin
-        if (seg_select == 5'b00001) begin
-            seg_select <= 5'b00100;
-            seg_data <= 8'b00000001;
-        end else if (seg_select == 5'b00100) begin
-            seg_select <= 5'b00001;
-            seg_data <= seg1;
+    else
+    begin
+        if (space_count == 0) begin
+            if (seg_select == 5'b00001) begin
+                seg_select <= 5'b00100;
+                seg_data <= 8'b00000001;
+            end else if (seg_select == 5'b00100) begin
+                seg_select <= 5'b00001;
+                seg_data <= seg1;
+            end
         end
-    end
-    else begin
-        if (seg_select == 5'b00001) begin
-            seg_select <= 5'b00100;
-            seg_data <= seg1;
-        end else if (seg_select == 5'b00100) begin
-            seg_select <= 5'b00001;
-            seg_data <= seg2;
+        else begin
+            if (seg_select == 5'b00001) begin
+                seg_select <= 5'b00100;
+                seg_data <= seg2;
+            end else if (seg_select == 5'b00100) begin
+                seg_select <= 5'b00001;
+                seg_data <= seg1;
+            end
         end
     end
 end

@@ -15,10 +15,8 @@ module main(
     wire car_out_deb;
     wire door_open_first;
     wire door_open_exit;
-    wire clk_1hz;
-    wire clk_4hz;
     wire clk_1kHz;
-    wire clk_60hz;
+    wire clk_250hz;
     wire [2:0] space_count; // 7 seg
     wire [1:0] near_slot; // 7 seg
 
@@ -26,23 +24,21 @@ module main(
     divider f1(
         .clk(clk_in),
         .reset(rst),
-        .clk_1hz(clk_1hz), // for fullGarage
-        .clk_4hz(clk_4hz), // for 2hz blinking
         .clk_1kHz(clk_1kHz),  // for debouncer and fsm
-        .clk_60Hz(clk_60hz)   // for 7seg
+        .clk_250Hz(clk_250hz)   // for 7seg
     );
 
     debouncer f2(
         .clk(clk_1kHz),
         .reset(rst),
-        .sig(car_in),
+        .sig(~car_in),
         .sig_debounced(car_in_deb)
     );
 
     debouncer f3(
         .clk(clk_1kHz),
         .reset(rst),
-        .sig(car_out[2]),
+        .sig(~car_out[2]),
         .sig_debounced(car_out_deb)
     );
 
@@ -58,7 +54,7 @@ module main(
 
     // segmentDivider module to generate the 7-segment display data
     segmentDivider f5(
-        .clk(clk_60Hz),
+        .clk(clk_250Hz),
         .rst(rst),
         .space_count(space_count),
         .near_slot(near_slot),
@@ -74,8 +70,8 @@ module main(
     );
 
     FSM f7(
-        .car_in(~car_in_deb),
-        .car_out_deb(~car_out_deb),
+        .car_in(car_in_deb),
+        .car_out_deb(car_out_deb),
         .car_out(car_out[1:0]),
         .clk(clk_1khz),
         .rst(rst),
